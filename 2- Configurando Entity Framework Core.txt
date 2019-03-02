@@ -1,0 +1,62 @@
+1- Se debe de tener las siguientes carpetas 
+
+    Context  // contexto de la base de datos
+    Entities  // clases que representan a la base de datos
+
+
+2- dentro de la carpeta Context se crea la clase "ApplicationDbContext"
+
+        public class ApplicationDbContext: DbContext
+        {
+            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+                :base(options)
+            {
+
+            }
+
+
+            public DbSet<Autor> Autores { get; set; }
+        }
+
+
+
+
+3- En la clase Startup.cs se debe configurar el proveedor de datos 
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+        }
+
+
+4- En appsetting.json  se establece el connectionString
+
+    "connectionStrings": {
+        "DefaultConnection": "Data Source=(localdb)\\mssqllocaldb:Initial Catalog=MiPrimerWebApiM3DB;Integrated security=true" 
+    },
+
+
+5- Añadir una migracion de la base de datos 
+
+     desde visual studio 
+        Add-Migration  <name migration>
+
+
+     desde visual studio code 
+        dotnet ef migrations add -n <name migration>
+
+
+
+6- Actualizar la base de datos
+
+    en la terminal visual studio
+        Update-database
+
+    visual studio code 
+        dotnet ef database update
+
+
+
