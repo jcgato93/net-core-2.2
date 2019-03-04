@@ -1,0 +1,37 @@
+-cuando creamos una funcion asincrona 
+permitimos que mientras dicha funcion se
+ejecute, nuestro servidor web, en vez de quedarse
+esperando a que termine, mejor se ponga a hacer
+otras tareas mientras tanto.
+
+-con este tipo de funciones tambiene viene cierta consecuenci
+como que existe costo de remdimiento al utilizar funciones
+asíncronas.
+
+-Son ideales para cuando se utiliza una base de datos
+o se hacen operaciones con otros web services.
+
+-Por convencion las funciones asincronas se les coloca
+al final la palabra  "Async"
+
+
+-Las funciones asincronas retornan un Task<T>
+
+-Para esperar la respuesta de una funcion asincrona se utiliza "await"
+
+
+=== Como crear una funcion asincrona ===
+
+
+        [HttpGet("{id}", Name = "ObtenerAutor")]
+        public async Task<ActionResult<Autor>> GetAsync(int id)
+        {
+            var autor = await context.Autores.Include(x => x.Libros).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (autor == null)
+            {
+                return NotFound();
+            }
+
+            return autor;
+        }
