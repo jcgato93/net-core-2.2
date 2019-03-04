@@ -1,0 +1,33 @@
+-La idea fundamental de tener un  Web Api
+es que tendremos clientes que harán peticiones HTTP
+a nuestro Web Api
+
+-Una acción es una función de un controlador que se
+ejecuta en respuesta a una petición HTTP realizada
+a nuestro Web Api.
+
+
+ === Controladores  ===
+
+Por convencion la forma de nombrar un controlador es
+la siguiente 
+
+    Nombre + Controller
+
+Ejemplo:   AutoresController    
+
+Los controladores normalmente se colocan en una carpeta
+llamada Controllers
+
+
+=== Nombrando acciones === 
+
+dentro de un controlador pueden existir varias acciones 
+con el mismo protocolo HTTP , para evitar una exception
+se puede nombra cada uno de estos de forma unica
+
+    [HttpGet("ObtenerAutor")]
+
+de este modo puede existir el siguiente endPoint
+
+        /autores/ObtenerAutor
