@@ -1,0 +1,39 @@
+Para una relacion de uno a muchos 
+
+        public class Autor
+            {
+                public int Id { get; set; }
+                [Required]
+                public string Nombre { get; set; }
+                public List<Libro> Libros { get; set; }
+            }
+
+
+para una relacion de muchos a uno
+
+    public class Libro
+    {
+        public int Id { get; set; }
+        [Required]
+        public string Titulo { get; set; }
+        [Required]
+        public int AutorId { get; set; }
+        public Autor Autor { get; set; }
+    }
+
+
+Esto conlleva un inconveniente , y es una referencia circular entre
+las entidates , es decir , que cuando se consulte un libro que incluya 
+la informacion del Autor , se generara una exception que indica un loopException
+pues uno referencia al otro. Para arreglar esto se debe hacer la siguiente configuracion
+en la Startup.cs dentro del metodo ConfigureService()
+
+    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
+luego de esta configuracion se podra solicitar la informacion de un autor de un libro
+sin ningun inconveniente
+
+    context.Libros.Include(x => x.Autor).ToList();
+
