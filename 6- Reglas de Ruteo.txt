@@ -1,0 +1,42 @@
+- Las reglas de ruteo son las que nos permiten mapear una
+URL con una acción
+
+exiten varias formas de especificar las rutas 
+    1- En los controladores (ruteo por atributo)
+    2- En la clase startup (ruteo convencional)
+
+
+
+=== Atriburo Route ===
+Este indica la base de las acciones del endPoint
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AutoresController: ControllerBase
+    {...}
+
+
+de este modo para acceder a las acciones del controlador
+seria de la siguiente manera 
+
+    www.host/api/Autores/{acction}
+
+
+para indicar parametros que se pasan por la URL 
+se indica de la siguiente manera 
+
+    [HttpPut("{id}")]
+    public ActionResult<Autor> Get(int id)
+    {...}
+
+
+para indicar que un parametro es opcional
+se utiliza  "?"
+
+        [HttpPut("{id?}")]
+
+
+
+para indicar un parametro por defecto
+
+    [HttpPut("{id = 1 }")]
