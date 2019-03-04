@@ -1,0 +1,48 @@
+Existen los siguientes tipos de datos 
+que puede retornar la accion de un controlador 
+
+- Tipo específico
+- ActionResult<T>
+- IActionResult
+
+
+
+=== ActionsResult ===
+- Es una clase que representa todos los tipos de dato
+que se pueden retornar desde una acción
+
+
+
+=== Tipo especifico === 
+Es cualquier objeto creado por el programador 
+o un string
+
+    public Autor get(){...} // En este caso retornara un objeto Autor
+
+pero de este modo las acciones pierden versatilidad , es decir que no
+podria retornar otro tipo de dato que no sea un Autor
+
+Ejemplo ....
+
+    public Autor Get(){
+        var autor = context.Autores.FirstOrDefault();
+
+        if(autor == null) return NotFound();
+
+        return autor;
+    }
+
+    en este caso daria un error puesto que NotFound()
+    no es un tipo de dato Autor.
+
+
+    para arreglar esto se utiliza ActionResult<T>
+
+    public ActionResult<Autor> Get(){...}
+
+
+=== IActionResult ===
+es parecido al ActionResult, pero este se limita
+a retornar un ActionResult o alguna clase que herede
+de esta.
+
