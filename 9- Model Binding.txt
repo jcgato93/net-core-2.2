@@ -60,3 +60,5 @@ Esto permite especificar de donde seran tomados los datos de la peticion
 - FromBody : en el cuerpo de la peticion como lo son en POST o PUT
 
 - FromService : Indica que la fuente seran servicios de la aplicación
+
+
