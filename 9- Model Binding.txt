@@ -1,0 +1,62 @@
+-Permite mapear datos de una peticion HTTP
+a parametros de una acción
+
+=== Query String ===
+
+- Son paras de nombre: valor  que se ven en la URL
+  un ejemplo seria 
+
+    api/autores?id=5&nombre=firstname&apellido=lastname
+
+  luego del simbolo "?" se colocan los query string separandolos
+  con el simbolo "&"
+
+
+un ejemplo del controlador seria : 
+
+    [HttpGet("{id}")]
+    public ActionResult<string> Get(int id,string nombre,string apellido){...}
+
+
+
+=== Valores de formulario === 
+
+- Son aquellos que vienen en el cuerpo(body) de una peticion
+como las HTTP POST o PUT, y se utilizan para enviar tipos de datos
+complejojs como un Objeto(class)
+
+
+    [HttpPost]
+    public void Post([FromBody] Autor value){...}
+
+
+
+=== Configuraciones de model Binding ===
+
+-BindRequired : este atributo agrega un error al model.state  si no se logra
+realizar el model binding 
+
+    [HttpGet("{id}")]
+    public ActionResult<string> Get(int id,[BindRequired]string nombre,string apellido){...}
+
+
+
+-BindNever : Indica que nunca se debe realizar un binding para un parametro especifico
+
+
+
+=== Especificando fuentes de datos === 
+
+Esto permite especificar de donde seran tomados los datos de la peticion 
+
+- FromHeader : parametros del Header de la peticion
+
+- FromQuery : que indica que la fuente sera un QueryString
+
+- FromRoute : Valores de ruta   api/autor/1
+
+- FromForm : que indica que en contenido vendra con Content-Type:Application/x-www-url-formencoded
+
+- FromBody : en el cuerpo de la peticion como lo son en POST o PUT
+
+- FromService : Indica que la fuente seran servicios de la aplicación
