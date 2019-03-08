@@ -1,0 +1,35 @@
+Esto permite validar los datos o parametros de 
+las peticiones HTTP
+
+=== Validación por Atributos ===
+
+- Required : Indica que su valor debe estar presente 
+
+- StringLength : Longitud de un String
+
+- Range : Rango en el que se debe encontrar un valor
+
+- Credicard : Valida el formato de una tarjeta de credito
+
+- Compare : Valida que dos propiedades sean iguales 
+
+- Phone : Valida un formato de telefono
+
+- RegularExpression : Valida que el valor coinsida con una expresion regular 
+
+- Url : Valida formato de una Url
+
+
+Todos estos puden usarse antecediendo el parametro , Ejemplo :
+
+    [HttpGet("{id}")]
+    public ActionResult<string> Get(int id,[Required]string nombre){...}
+
+Aunque lo que se suele hacer es tener esas valiciones en un modelo
+
+    public class Autor{
+        public int id {get; set;}
+
+        [Required]
+        public string nombre {get; set;}
+    }
