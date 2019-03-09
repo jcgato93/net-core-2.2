@@ -1,0 +1,85 @@
+La validacion por modelos tiene la ventaja de poder acceder a todas 
+las propiedades de un modelo para realizar complejas reglas de 
+validacion.
+Pero tiene la desventaja que es una validacion al nivel del modelo
+es decir que no se puede reutilizar con otros modelos.
+
+
+=== Validacion por atributo ===
+
+ejemplo: 
+    Se necesita que la propiedad nombre de la clase Autor tenga la primera 
+    letra en mayuscula.
+
+1- Crear una carpeta "Helpers" dentro del proyecto
+2- Crear la clase "PrimeraLetraMayusculaAttribute"
+
+Nota: las clases que seran usadas como atributo deben finalizar 
+con la palabra "Attribute"
+
+3- heredar de  "ValidationAttribute"
+
+    public class PrimeraLetraMayusculaAttribute : ValidationAttribute
+
+4- Sobre escribir el metodo "isValid"
+
+    public override ValidationResult IsValid(object value, ValidationContext validationContext)
+    {
+        return base.IsValid(value,validationContext)
+    }
+
+    value : trae el valor de la propiedad donde se a colocado el atributo
+    validationContext: trae el contexto de la propiedad, como puede ser una clase
+
+5- Escribir la validacion
+
+    public override ValidationResult IsValid(object value, ValidationContext validationContext)
+    {
+        if(value == null || string.IsNullOrEmpty(value.ToString()))
+        {
+            return ValidationResult.Success;
+        }
+
+        var firstLetter = value.ToString()[0].ToString();
+
+        if(firstLetter != firstLetter.ToUpper())
+        {
+            return new ValidationResult("La primera letra debe ser mayuscula");
+        }
+
+
+        return base.IsValid(value,validationContext)
+    }
+
+
+
+6- Colocar el atributo sobre la propiedad de la clase 
+
+    [PrimeraLetraMayusculaAttribute]
+    public nombre {get; set;}
+
+
+
+
+=== Validacion personalizada en el modelo ===
+Este tipo de validacion es menos flexible ya que solo aplica
+a nivel del modelo 
+
+1- en el modelo , debe implementar la interface IvalidatableObject
+
+    public class Autor : IvalidatableObject
+
+2- Implementar el metodo 
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if(!string.IsNullOrEmpty(nombre))
+        {
+            var primeraLetra = nombre[0].ToString();
+
+            if(primeraLetra != primeraLetra.ToUpper())
+            {
+                yield return new ValidationResult("La primera letra debe ser mayuscula",new string[]{nameof(nombre)});
+            }
+        }
+    }
