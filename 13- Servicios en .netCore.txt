@@ -1,0 +1,39 @@
+Asp net core brinda unas herramientas para 
+la resolucion de dependencias de nuestras clases
+Esto se puede hacer configurando servicios 
+en la clase Startup
+
+- Servicio a una clase la cual puede ser inyectada 
+a otras clases por el framework
+
+
+1- en Startup.cs 
+
+public void ConfigureServices(IserviceCollection services){
+    
+    services.AddTransient<IClaseB, ClaseB>(); // la primera  es la clases sera inyectada, la segunda la instancia que suplira la inyeccion
+
+}
+
+=== Tiempo de vida ===
+Los servicios tinen diferentes tiempos de vida, es decir 
+el tiempo que se sirve la instancia de una clase
+
+Transient : es la que dice que cada vez que 
+se solicite se va a servir una nueva instancia de la clase
+
+    services.AddTransient<IClaseB,ClaseB>();
+
+
+Scope: son creados por peticion HTTP, es decir que si varios
+servicios en una peticion HTTP utilizan la misma clase , se les
+servira la misma instancia
+
+    services.AddScoped<IClaseB,ClaseB>();
+
+
+
+Singleton : simpre retornara la misma instancia, solo se 
+reset cuando se enciende de nuevo la aplicacion
+
+    services.AddSingleton<IClaseB,ClaseB>();
