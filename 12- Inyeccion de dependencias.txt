@@ -1,0 +1,69 @@
+Las clases de una aplicacion rara vez son completamente 
+son autosuficientes , es normal separar responsabilidades 
+entre distintas clases
+
+- Cuando una clase A utiliza una clase B , decimos  que la clase B
+es una dependencia de la clase A
+
+
+- ACOPLAMIENTO ALTO entre clases se caracteriza por una dependencia poco 
+flexible en otras clases
+    ejemple:
+
+        public class ClaseA{
+            public void RealizarAccion(){
+                ClaseB claseB = new ClaseB();
+                claseB.HacerAlgo();
+            }
+        }
+
+
+- ACOPLAMIENTO BAJO se da cuando existe facilidad de intercambiar dependencias.
+para ello la manera mas facil seria la inyeccion de dependencias 
+
+- la inyeccion de dependencias es una tecnica en la cual las dependencias de un 
+objeto son suplidas por otro objeto.
+una manera comun de implementar la inyeccion de dependencias es atraves 
+del constructor de la clase 
+
+        publilc class ClaseA{
+            private readonly ClaseB claseB;
+
+            public ClaseA(ClaseB claseB){
+                this.claseB = claseB;
+            }
+
+            public void RealizarAccion(){
+                claseB.HacerAlgo();
+            }
+        }
+
+pero aun asi sigue teniendo una fuerte dependencia 
+para arreglarlo la manera mas optima seria utilizar interfaces
+
+    public interface IClaseB{
+        void HacerAlgo();
+    }
+
+
+    // la clase B implementa la interface 
+    public class ClaseB : IClaseB
+    {
+        public void HacerAlgo();
+    }
+
+
+de este modo se puede pasar por parametro en el constructor 
+la interface 
+
+        publilc class ClaseA{
+            private readonly IClaseB claseB;
+
+            public ClaseA(IClaseB claseB){
+                this.claseB = claseB;
+            }
+
+            public void RealizarAccion(){
+                claseB.HacerAlgo();
+            }
+        }
