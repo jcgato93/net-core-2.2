@@ -1,0 +1,36 @@
+Middleware 
+
+- Una tuberia(Pipe) es una cadena de procesos conectados de tal forma
+que la salida de cada elemento de la cadena es la entrada
+del proximo 
+
+- A cada uno de los procesos le llamamos Middleware
+    como por ejemplo el proceso de autenticacion antes
+    de acceder a un controlador 
+
+- El orden de los Middleware es importante
+
+la configuracion de los middlewares se realiza 
+en la clase Startup.cs en el metodo "Configure"
+
+ejemplo:
+
+    public void Configure(IApplicationBuilder app, IHostingEnviroment env)
+    {
+        if(env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseHsts();
+        }
+
+        app.UseHttpRedirection();
+        app.UseAuthentication(); <----- se coloca previo a la configuracion de Mvc
+        app.UseMvc();
+    }
+
+
+Un middleware puede detener un proceso sin que ejecute
+los siguientes , a esto se le conoce como sortcircuit
