@@ -1,0 +1,82 @@
+=== Filtros ===
+
+- Los filtros nos ayudan a correr codigo en 
+determinados momentos del ciclo de vida del procesamiento
+de una peticion HTTP 
+
+- Los filtros son utilies cuando tenemos la necesidad
+de ejecutar una logica en varias acciones de varios
+controladores y queremos evitar tener que repetir codigo
+
+
+
+=== Tipos de Filtros ===
+
+- Filtros de Autorización
+
+- Filtros de Recursos : se puede implementar para validaciones generales o
+para acciones de cache
+
+- Filtros de Accion : se ejecutan antes y despues de una accion 
+
+- Filtros de Exception : se ejecuta cuando se presenta una exception no 
+atrapada en un try catch dentro de una accion
+
+- Filtros de Resultado : se ejecutan antes despues de la ejecucion de un ActionResult
+
+
+lo ideal es que se implementen en las acciones aunque 
+tambien se puede utilizar en los controladores de tal modo
+que aplica para todas las acciones dentro del controlador
+Tambien se puede aplicar a todo el Web api 
+
+
+=== Configuracion de filtros ===
+
+- En la clase Startup.cs en el metodo ConfigureService(){...}
+
+Ejemplo de habilitacion de filtro de Cache 
+
+
+- Habilitar cache 
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddResponseCaching(); 
+        }
+
+
+- Configuracion , se establece antes de  "UseMvc()"
+
+        public void Configure(IApplicationBuilder app, IHostingEnviroment env)
+        {
+            if(env.IsDeveloment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else{
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseResponseCaching();  //<-- antes de Mvc
+
+            app.UseMvc();
+
+
+        }
+
+- En el Controller , se especifica que la respuesta que retornara 
+desde el cache 
+
+
+    [HttpGet]
+    [ResponseCache(Duration = 15)]
+    public ActionResult<string> Get()
+    {
+         return DateTime.Now.Second.ToString();
+    }
+
+
+
