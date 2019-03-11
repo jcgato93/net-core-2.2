@@ -1,0 +1,68 @@
+Un ejemplo seria que necesitaramos estar 
+consumiendo un web services cada cierto tiempo
+para tener la informacion actulizada 
+
+Para esto podemos utilzar la interface 
+IHostedService
+
+- Es una interfaz que nos permite crear servicio el cual
+va a ejecutar una funcion cuando levantemos el web host
+y cuando lo detengamos 
+
+
+1- Crear Carpeta Services 
+
+2- Crear clase que implemente la interface IHostedService
+
+    
+
+    public class WriteToFileHostedService : IHostedService, IDisposable
+    {
+
+        private Timer timer;
+
+        public Task StartAsync(CancellationToken cancellationToken){
+
+            timer = new  Timer(metodoQueSeEjecutara, null, TimeSpan.Zero, TimeSpan.FromSeconds(5))  // <- a qui se puede especificar desde que momento y cada cuanto se ejecutara      
+            //....  Codigo que se ejecutara cuando suba el servidor 
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            //....  Codigo que se ejecutara cuando se bajen los servicios
+            //del servidor. No es 100% seguro que este se ejecute
+
+            timer?.Change(Timeout.Infinite, 0); // Desactivar el timer;
+
+            return Task.CompletedTask;
+        }
+
+
+        public void Dispose()
+        {
+            timer?.Dispose();
+        }
+    }
+
+
+
+3- Configurar el servicio en la clase Startup.cs
+en el metodo ConfigureServices 
+
+
+    public void ConfigureServices(IserviceCollection services)
+    {
+        services.AddTransient<Microsoft.Extensions.Hosting.IHostedService, WriteToFileHostedService>();
+    }
+
+se pueden correr varios de estos servicios de manera simultanea
+tan sole agreando la misma linea de codigo y 
+especificando la clase que se usara     
+
+    public void ConfigureServices(IserviceCollection services)
+    {
+        services.AddTransient<Microsoft.Extensions.Hosting.IHostedService, WriteToFileHostedService>();
+        services.AddTransient<Microsoft.Extensions.Hosting.IHostedService, WriteToFileHostedService2>();
+    }
