@@ -1,0 +1,58 @@
+La documentacion oficial de Entity framework 
+menciona que el DbContext debe ser servido
+como servicio Scope
+
+el promebla con esto es que el IHotedService es transient(tansitorio)
+
+para solucionarlo se puede utilizar 
+IServiceProvider para crear un contexto
+para poder utilizar un servicio de tipo scope 
+dentro de un trasient 
+
+
+
+   public class WriteToFileHostedService : IHostedService, IDisposable
+    {
+
+        private Timer timer;
+        private IServiceProvider Services {get; set;}
+
+        public WriteToFileHostedService(IServiceProvider services){
+            
+            this.Services = services;
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken){
+
+            timer = new  Timer(metodoQueSeEjecutara, null, TimeSpan.Zero, TimeSpan.FromSeconds(5))  // <- a qui se puede especificar desde que momento y cada cuanto se ejecutara      
+            //....  Codigo que se ejecutara cuando suba el servidor 
+
+            return Task.CompletedTask;
+        }
+
+        private void metodoQueSeEjecutara(){
+            using(var scope = Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContxt>();//requiere la instancia del DbContext
+                Tabla log = new Tabla;
+                context.Tabla.Add(log);
+                context.SaveChanges();
+            }
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            //....  Codigo que se ejecutara cuando se bajen los servicios
+            //del servidor. No es 100% seguro que este se ejecute
+
+            timer?.Change(Timeout.Infinite, 0); // Desactivar el timer;
+
+            return Task.CompletedTask;
+        }
+
+
+        public void Dispose()
+        {
+            timer?.Dispose();
+        }
+    }
