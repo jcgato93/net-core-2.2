@@ -1,0 +1,62 @@
+- No es  buena practica retornar entidades desde 
+nuestras acciones(controllers)
+
+- Es mejor retornar objetos de transferecia de 
+datos (DTOs) o como tambien se les conoce un ViewModel
+de este modo podemos mostrar solo los campos que queremos 
+que los clientes vean
+
+
+
+1- Crear carpeta Models y dentro la clase nameDTO
+y con la cual trabajara los controllers 
+
+     public class AutorDTO{
+
+         //....propiedades que representen una entidad 
+         // y que si podra ver el cliente         
+     }
+
+2- para parsear los datos de un Dto a una entidad de 
+manera sencilla el paquete de AutoMapper 
+
+    // desde visual estudio
+     PM>  Install-Package AutoMapper.Extensions.Microsoft.DependencyInjection
+
+     // desde VS code 
+     dotnet add package AutoMapper
+
+3- se configura en el metodo ConfigureServices de la clase 
+Startup.cs 
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddAutoMapper();
+        }
+
+
+4- Uso del AutoMapper dentro del controller
+utilizando inyeccion de dependencias
+
+    private readonly IMapper mapper;
+
+    public Contructor(IMapper mapper)
+    {
+        this.mapper = mapper;
+    }
+
+
+    public asyn Task<ActionResult<AutorDTO>> Get(int id)
+    {
+        var autor = await context.Autores.FirstOrDefault(x=>x.Id == id);
+
+        if(autor == null){
+            return NotFound();
+        }
+
+        var autorDTO = mapper.Map<AutorDTO>(autor);
+
+        return autorDTO;
+    }
+
+
