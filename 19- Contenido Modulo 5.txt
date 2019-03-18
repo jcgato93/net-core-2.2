@@ -1,0 +1,5 @@
+- DTOs y Automapper
+-Crear Recurosos Con POST
+- Actualizacion Completa de Recursos con PUT
+- Actualizando Solo algunos campos con HTTP PATCH
+- Borrando recursos 
