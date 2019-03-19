@@ -1,0 +1,25 @@
+Cuando se quiere actulizar un recurso por buenas 
+practicas se hace por medio del metodo HTT PUT
+cuando se utiliza este , es por que se va a enviar el objeto 
+con toda la informacion ya que se va a realizar una actualizacion 
+completa sobre la entidad 
+
+
+1- Crear DTO si es necesario
+
+
+
+2- Crear metodo del controlador 
+
+
+    // PUT api/autores/5
+    [HttPut("{id}")]
+    public async Task<ActionResult> Put(int id,[FromBody] AutorCreacionDTO autorActualizacion)
+    {
+       var autor = mapper.Map<Autor>(autorActualizacion);
+       autor.Id = id;
+       context.Entry(autor).State = EntityState.Modified;
+       await context.SaveChangesAsync();
+       
+       return NoContent();
+    }
