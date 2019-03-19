@@ -1,0 +1,54 @@
+- Cuando se crea un recurso , lo correcto es que nuestro WEB API 
+retorne un codigo de estatus 201 Created, y en la cabecera location
+la url del recurso creado
+
+- Una clase llamada CreatedAtRouteResult nos ayuda con esto 
+
+- Debemos ponerle un nombre a nuestras reglas de ruteo con el atributo Name
+        
+        [HttpGet("{id}",Name="ObtenerAutor")]
+
+
+1- Crear DTO de creacion de Autor. Esto con el fin de no mostrar al cliente 
+campos que no son requeridos en  el momento de crear un nuevo autor 
+como lo es el Id 
+
+    publi class AutorCreacionDTO
+    {
+        [Required]
+        public string Name {get; set;}
+        public DateTime FechaNacimiento  {get; set;}
+    }
+
+
+2- Crear el controlador con metodo POST 
+
+    [HttPost]
+    public async Task<ActionResult> Post([FromBody] AutorCreacionDTO autorCreacion)
+    {
+        // pasar de DTO a Entity
+        var autor = mapper.Map<Autor>(autorCreacion); 
+
+        // Guardar autor 
+        context.Add(autor);
+        await context.SaveChangesAsync();
+
+        // pasar Entity a DTO
+        var autorDTO = mapper.Map<AutorDTO>(autor);
+         
+        // Crear respuesta con la ruta del recurso creado 
+        return new CreatedAtRouteResult("ObtenerAutor",new { id = autor.id }, autorDTO);
+    }
+
+
+3- Configurar automapper en el metodo ConfigureServices de la clase Startup.cs 
+
+    public void ConfigureServices(IServiceCollection services){
+
+        services.AddAutoMapper(options => 
+        {
+            options.CreateMap<AutorCreacionDTO, Autor>();
+        })
+    }
+
+
