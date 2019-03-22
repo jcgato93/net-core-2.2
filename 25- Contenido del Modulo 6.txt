@@ -1,0 +1,7 @@
+En este se aprendera como consumir servicios o quizas 
+archivos de configuracion de una manera segura
+
+1- Introduccion a las configuraciones
+2- Proveedores de Configuracion 
+3- Consideraciones de Seguridad
+4- Configurando Azure Key Vault
