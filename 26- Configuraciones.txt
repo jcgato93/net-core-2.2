@@ -1,0 +1,25 @@
+- Las configuracioens son datos externos de nuestra
+aplicacion que la ayudan a funcionar correctamente
+
+un ejemplo de estos datos es la cadena de conexion
+de la base de datos  "connection string", ya que lo
+recomendable es que esto no este en el codigo 
+fuente de la aplicacion 
+
+- para acceder a dicha informacion se utiliza la 
+configuracion de proveedores
+
+Estas fuentes de informacion vienen de distintas formas,
+estas pueden ser:
+    - Archivos de texto
+    - variables de ambiente
+    - argumentos de linea de comandos,
+    - Objetos en memoria
+    - ..etc
+
+- por defecto .net core 2.2 ya viene con un proveedor 
+configurado para la lectura del json de configuraciones
+el appsettings.json usando IConfiguration para extraer
+los datos
+
+    
