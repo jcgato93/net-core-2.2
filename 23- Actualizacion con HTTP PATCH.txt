@@ -1,0 +1,67 @@
+- Utilizamos el método HTTP PATCH para aplicar actualizaciones
+parciles a un recurso
+
+Como Funciona ?
+
+el cliente envia en el cuerpo de la solicitud los 
+campos con los valores que desea actualizar
+
+este ya esta estandarizado por un formato llamado
+JSON PATCH(RFC 6902) y este indica la estructura
+
+Este estandar define un conjunto de operaciones 
+    - Agregar 
+    - Remover
+    - Remplazar 
+    - Mover 
+    - Copiar
+    - Probar
+
+
+Ejemplo de un JSON Patch 
+
+    [
+        {"op":"replace","path":"/nombre","value":"camilo"},
+        {"op":"replace","path":"/fechaNacimiento","value":"1993-08-01"}
+    ]
+
+op : define el tipo de operacion 
+path : determina el campo 
+value : el valor
+
+
+=====  implementacion ====
+
+    [HttpPatch("{id}")]
+    public async Task<ActionResult> Patch(int id,[FromBody] JsonPatchDocument<AutorCreacionDTO> patchDocument)
+    {
+        if(patchDocument == null)
+        {
+            return BadRequest();
+        }
+
+        var autorDeLaDB= await context.Autores.FirstOrDefaultAsync(x => x.Id == id);
+
+        if(autorDeLaDB == null)
+        {
+            return NotFound();
+        }
+
+        var autorDTO = mapper.Map<AutorCreacionDTO>(autorDeLaDB);
+
+        patchDocument.ApplyTo(autorDTO, ModelState); // se pasa el modelState para validar las reglas del modelo
+
+        var isValid = TryValidateModel(autorDeLaDB); // validar modelo;
+
+        if(!isValid){
+            return BadRequest(ModelState);
+        }
+
+        // pasar del DTO a la Entidad
+        mapper.Map(autorDTO, autorDeLaDB);
+
+        // Guardar los cambios
+        await context.SaveChangesAsync();
+         
+        return NoContent();
+    }
