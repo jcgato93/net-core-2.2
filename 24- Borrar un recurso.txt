@@ -1,0 +1,19 @@
+
+[HttpDelete("{id}")]
+public async Task<ActionResult<Autor>> Delete(int id)
+{
+    var autorId = await context.Autores.Select(x=>x.Id).FirstOrDefaultAsync(x=>x == id);
+
+    // si retorna el valor por defecto
+    if(autorId == default(int)){
+        return NotFound();
+    }
+
+    context.Remove(new Autor{Id = autorId});
+    await context.SaveChangesAsync();
+    
+    // Si se quisiera retornar el autor eliminado
+    // return Ok(autor);
+
+    return NoContent();
+}
