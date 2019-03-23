@@ -1,0 +1,15 @@
+- Existe data que es importante proteger y no tener a simple
+vista en un archivo de texto plano
+
+- para este proposito existen varios proveedores
+de configuracion seguros:
+    - Variables de ambiente
+    - Azure Key Vault
+
+
+    Variables de ambiente:
+        son  valores que se almacenan en el sistema en el 
+        que corre un proceso
+
+    
+    
