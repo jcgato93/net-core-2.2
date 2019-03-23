@@ -1,0 +1,61 @@
+- Un proveedor de configuraciones es una 
+fuente de datos de configuracion 
+
+- un nuevo proyecto de .net core 2.2 
+tiene los siguientes proveedores configurados por defecto
+    -appsettings.json
+    -appsetting.{ambiente}.json
+    -User secrets(en ambiente de desarrollo)
+    -Variables de ambiente
+    -Argumentos de linea de comandos
+
+=== Orden de provedores ===
+
+-Si existen campos repetidos entre proveedodres,se toma el valor
+del ultimo proveedor agregado que contenga el campo en
+cuestion
+
+
+=== crear configuracion de proveedores ===
+
+
+
+1- En la clase Program.cs
+
+    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((env, config) =>
+            {
+                // aquí colocamos la configuración de proveedores 
+                var ambiente = env.HostingEnvironment.EnvironmentName;
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                config.AddJsonFile($"appsettings.{ambiente}.json", optional: true, reloadOnChange: true);
+                config.AddEnvironmentVariables();
+
+                if (args != null)
+                {
+                    config.AddCommandLine(args);
+                }
+
+                var currentConfig = config.Build();
+            })
+                .UseStartup<Startup>();
+    }
+
+2- el ultimo provedor es el que se toma 
+
+3- para usar alguna de las variables de los proveedores de
+configuracion 
+
+    private readonly IConfiguration configuraiton;
+
+    constructor(IConfiguration configuration)
+    {
+        this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<string> Get(int id)
+    {
+        return configuration["variable padre : variable hija"];
+    }
