@@ -1,0 +1,6 @@
+-Autenticacion y Autorizacion
+-CORS
+-Encriptacion
+-Llaves de proteccion de datos
+-Funcion Hash
+-HTTPS Y HSTS
