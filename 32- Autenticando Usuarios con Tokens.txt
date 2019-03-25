@@ -1,0 +1,47 @@
+1- Configurar el Web API  para que verifique los JWT
+
+ en la clase Startup.cs en el metodo ConfigureServices
+
+
+public void ConfigureServices(IServiceCollection services)
+        {
+
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration["JWT:key"])), // llave en las configuraciones
+                            ClockSkew = TimeSpan.Zero
+                        });
+        }
+
+
+2- en la clase Startup.cs en el metodo Configure 
+antes de app.UseMvc();
+
+            app.UseAuthentication(); // Activar sistema de autenticacion            
+            app.UseMvc();
+
+
+3- ya con las configuraciones previas se pueden habilitar en los controladores
+de la siguiente manera 
+
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
+
+4- para probar la utenticacion , se puede utilizar Postman , 
+y en la pestaña que dice Authorization escoger el tipo "Bearer Token" y
+suministrar el token que retorna la API luego de crear un usuario o estar 
+logueado...
+
+Otra opcion es simplemente colocar un Header  "Authorization" y colocar como valor 
+la palabra Bearer + Token 
+    ejemplo 
+
+    Authorization   Bearer aklsdjfklajrioue856d4f56opioi!
