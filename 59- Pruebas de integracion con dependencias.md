@@ -90,13 +90,7 @@ public class RepositorioAutoresMock : IRepositorioAutores
             return _factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureTestServices(services =>
-                {
-                    services.AddMvc(options =>
-                    {
-                        options.Filters.Add(new AllowAnonymousFilter());
-                        options.Filters.Add(new FakeUserFilter());
-                    });
-
+                {                  
                     services.AddScoped<IRepositorioAutores, RepositorioAutoresMock>();
                 });
             });
