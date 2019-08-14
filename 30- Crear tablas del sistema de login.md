@@ -10,15 +10,17 @@ seguir los siguientes pasos:
 y dentro de esta la clase "ApplicationUser"
 que herede de "IdentityUser"
 
+```csharp
     public class ApplicationUser : IdentityUser 
     {
         ...
     }
+```
 
-2- Crear carpta "Context" y crear la clase 
+2- Crear carpeta "Context" y crear la clase 
 "ApplicationDbContext"  y que esta herede de 
 "IdentityDbContext"  y se le pasa el "ApplicationUser"
-
+```csharp
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -30,9 +32,9 @@ que herede de "IdentityUser"
         // aqui se colocan los DbSet<...> de las otras tablas
         // de que iran en la base de datos
     }
-
+```
 3- En la clase Startup.cs en el metodo ConfitureServices()
-
+```csharp
     public void ConfigureServices(IServiceCollection services)
     {
         //Configurar ApplicationDbContext
@@ -45,7 +47,7 @@ que herede de "IdentityUser"
 
         services.AddMvc().SerCompatibilityVersion(CompatibilityVersion.Version_2_2);
     }
-
+```
 
 4- actualizar la base de datos desde la terminal
 

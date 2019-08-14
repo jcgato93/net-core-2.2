@@ -110,7 +110,7 @@ utilizando <strong>ProducesResponseType</strong>
 /// <param name="id">Id del elemento a borrar</param>
 [HttpDelete("{id}",Name = "BorrarAutor")]
 [ProducesResponseType(404)]
-[ProducesResponseType(typof(AutorDto),200)]
+[ProducesResponseType(typeof(AutorDto),200)]
 public async Task<ActionResult<Autor>> Delete(int id)
 {
     ...
