@@ -43,7 +43,7 @@ en el metodo ConfigureServices
 
     public void ConfigureServices(IservicesCollection services){
 
-        services.AddScoped<MiFiltroDeAccion>
+        services.AddScoped<MiFiltroDeAccion>();
     }
 
 
